@@ -13,8 +13,24 @@ import java.util.List;
 @Controller
 public class BoardController {
 
-    private final BoardPersistRepository boardNativeRepository;
     private final BoardPersistRepository boardPersistRepository;
+
+    @GetMapping("/board/{id}/update-form")
+    public String uodateForm(@PathVariable Integer id, HttpServletRequest request) {
+        Board board = boardPersistRepository.findById(id);
+        request.setAttribute("board", board);
+        return "/board/update-form";
+    }
+
+    @PostMapping("/board/{id}/update")
+    public String update(@PathVariable Integer id, BoardRequest.UpdateDTO reqDTO) {
+//        Board board = boardPersistRepository.findById(id);
+//        board.update(reqDTO);
+
+        // 조회해서 영속화 시킴. 객체의 상태만 바꾸면 끝!
+        boardPersistRepository.updateById(id, reqDTO);
+        return "redirect:/board/" + id;
+    }
 
 
     // 게시글 삭제 완료
@@ -51,29 +67,6 @@ public class BoardController {
     public String saveForm() {
         return "board/save-form";
     }
-
-
-
-
-    @GetMapping("/board/{id}/update-form")
-    public String uodateForm(@PathVariable Integer id, HttpServletRequest request) {
-        Board board = boardNativeRepository.findById(id);
-        request.setAttribute("board", board);
-        return "/board/update-form";
-    }
-
-    @PostMapping("/board/{id}/update")
-    public String update(@PathVariable Integer id, String title, String content, String username) {
-        boardNativeRepository.updateById(id, title, content, username);
-        return "redirect:/board"+id;
-    }
-
-
-
-
-
-
-
 
 
 }

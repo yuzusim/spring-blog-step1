@@ -28,4 +28,10 @@ public class Board {
         this.content = content;
         this.username = username;
     }
+
+    public void update(BoardRequest.UpdateDTO reqDTO) {
+        this.title = reqDTO.getTitle();
+        this.content = reqDTO.getContent();
+        this.username = reqDTO.getUsername();
+    }
 }
