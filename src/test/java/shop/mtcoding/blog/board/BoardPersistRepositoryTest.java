@@ -19,6 +19,25 @@ public class BoardPersistRepositoryTest {
     @Autowired
     private EntityManager em;
 
+    // 게시글 상세보기
+    @Test
+    public void findById_test() {
+        // given
+        int  id = 1;
+
+        // when
+        // 게시글 한건 조회
+        Board board = boardPersistRepository.findById(id);
+        em.clear(); // em.clear를 사용해서 PC를 비웠기 때문에 쿼리가 2번 날아간다. -> 사용할 필요 없음!
+        // 동일한 id를 조회 -> 캐싱이 되었기 때문에 1번 달아가는 쿼리!
+        boardPersistRepository.findById(id);
+
+        // then
+        assertThat(board.getTitle()).isEqualTo("제목1");
+        assertThat(board.getContent()).isEqualTo("내용1");
+
+    }
+
 
     // 게시글 목록보기
     @Test
@@ -29,8 +48,8 @@ public class BoardPersistRepositoryTest {
         List<Board> boardList = boardPersistRepository.findAll();
 
         // then
-        System.out.println("findAll_test/size : " +boardList.size());
-        System.out.println("findAll_test/username : " +boardList.get(2).getUsername());
+        System.out.println("findAll_test/size : " + boardList.size());
+        System.out.println("findAll_test/username : " + boardList.get(2).getUsername());
 
         // org.assertj.core.api
         Assertions.assertThat(boardList.size()).isEqualTo(4);

@@ -16,6 +16,14 @@ public class BoardController {
     private final BoardPersistRepository boardNativeRepository;
     private final BoardPersistRepository boardPersistRepository;
 
+    // 게시글 상세보기
+    @GetMapping("/board/{id}")
+    public String detail(@PathVariable Integer id, HttpServletRequest request) {
+        Board board = boardPersistRepository.findById(id);
+        request.setAttribute("board", board);
+        return "board/detail";
+    }
+
     // 게시글 목록보기 완료
     @GetMapping("/")
     public String index(HttpServletRequest request) {
@@ -64,11 +72,5 @@ public class BoardController {
 
 
 
-    // 게시글 상세보기
-    @GetMapping("/board/{id}")
-    public String detail(@PathVariable Integer id, HttpServletRequest request) {
-        Board board = boardNativeRepository.findById(id);
-        request.setAttribute("board", board);
-        return "board/detail";
-    }
+
 }
