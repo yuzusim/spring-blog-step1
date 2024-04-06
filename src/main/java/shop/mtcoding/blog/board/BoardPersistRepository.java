@@ -1,6 +1,7 @@
 package shop.mtcoding.blog.board;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,33 @@ import java.util.List;
 public class BoardPersistRepository {
     private final EntityManager em;
 
+    // 게시글 삭제하기 완료
+
+    // id 바인딩을 ?로 하지 않아도 됨 JPQL
+    // :id는 JPQL(Java Persistence Query Language) 쿼리에서 사용되는 이름 기반 매개변수.
+    // 이 매개변수는 쿼리를 실행할 때 동적으로 값을 바인딩할 수 있게 해준다.
+    // (여기선 setParameter id 값을 바인딩하는 듯!)
+    @Transactional
+    public void deleteById(int id){
+        Query query =
+                em.createQuery("delete from Board b where b.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+
+    // 이거 안 쓸 거다.
+    @Transactional
+    public void deleteByIdV2(int id) {
+        Board board = findById(id);
+
+        // 근데 remove가 어떻게 동작하는지 궁금하니 테스트 해보자!
+        em.remove(board);
+    }
 
 
 
-    // 게시글 상세보기
+    // 게시글 상세보기 완료
 //    em.find ?
 //    DB한테 요청하는게 아니라, PC한테 1번 PK키를 가지고 있는 오브젝트가 있는지 BR이 물어보는 것!
 //    (nativeQuery는 그냥 던지는 것. 복잡한 쿼리는 nativeQuery로 던져야함!)
@@ -28,7 +52,7 @@ public class BoardPersistRepository {
         return board;
     }
 
-    // 게시글 목록보기
+    // 게시글 목록보기 완료
     public List<Board> findAll(){
         Query query =
                 em.createQuery("select b from Board b order by b.id desc", Board.class);
@@ -48,13 +72,7 @@ public class BoardPersistRepository {
 
 
 
-    @Transactional
-    public void deleteById(int id){
-        Query query =
-                em.createNativeQuery("delete from board_tb where id =?");
-        query.setParameter(1, id);
-        query.executeUpdate();
-    }
+
 
 
     @Transactional

@@ -16,7 +16,15 @@ public class BoardController {
     private final BoardPersistRepository boardNativeRepository;
     private final BoardPersistRepository boardPersistRepository;
 
-    // 게시글 상세보기
+
+    // 게시글 삭제 완료
+    @PostMapping("/board/{id}/delete")
+    public String delete(@PathVariable Integer id) {
+        boardPersistRepository.deleteById(id);
+        return "redirect:/";
+    }
+
+    // 게시글 상세보기 완료
     @GetMapping("/board/{id}")
     public String detail(@PathVariable Integer id, HttpServletRequest request) {
         Board board = boardPersistRepository.findById(id);
@@ -60,12 +68,7 @@ public class BoardController {
         return "redirect:/board"+id;
     }
 
-    // 게시글 삭제
-    @PostMapping("/board/{id}/delete")
-    public String delete(@PathVariable Integer id) {
-        boardNativeRepository.deleteById(id);
-        return "redirect:/";
-    }
+
 
 
 
