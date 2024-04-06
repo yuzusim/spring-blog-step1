@@ -1,6 +1,5 @@
 package shop.mtcoding.blog.board;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,8 @@ import java.util.List;
 @Controller
 public class BoardController {
 
-    private final BoardNativeRepository boardNativeRepository;
+    private final BoardPersistRepository boardNativeRepository;
+    private final BoardPersistRepository boardPersistRepository;
 
     @GetMapping("/board/{id}/update-form")
     public String uodateForm(@PathVariable Integer id, HttpServletRequest request) {
@@ -51,11 +51,8 @@ public class BoardController {
 
     // 게시글 쓰기
     @PostMapping("/board/save")
-    public String save(String title, String content, String username) {
-//        System.out.println("title : "+title);
-//        System.out.println("content : "+content);
-//        System.out.println("username : "+username);
-        boardNativeRepository.save(title, content, username);
+    public String save(BoardRequest.SaveDTO reqDTO) {
+        boardPersistRepository.save(reqDTO.toEntity());
         return "redirect:/";
     }
 
