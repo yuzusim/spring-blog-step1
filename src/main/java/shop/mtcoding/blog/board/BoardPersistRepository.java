@@ -13,6 +13,14 @@ import java.util.List;
 public class BoardPersistRepository {
     private final EntityManager em;
 
+    // 게시글 목록보기
+    public List<Board> findAll(){
+        Query query =
+                em.createQuery("select b from Board b order by b.id desc", Board.class);
+        return query.getResultList();
+    }
+
+    // 게시글 쓰기 완료
     // 애초부터 Board 객체를 받는 것
     @Transactional
     public Board save(Board board){
@@ -29,11 +37,6 @@ public class BoardPersistRepository {
         return (Board) query.getSingleResult();
     }
 
-    public List<Board> findAll(){
-        Query query =
-                em.createNativeQuery("select * from board_tb order by id desc", Board.class);
-        return (List<Board>) query.getResultList();
-    }
 
 
     @Transactional

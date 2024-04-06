@@ -1,6 +1,7 @@
 package shop.mtcoding.blog.board;
 
 import jakarta.persistence.EntityManager;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -17,6 +18,24 @@ public class BoardPersistRepositoryTest {
     private BoardPersistRepository boardPersistRepository;
     @Autowired
     private EntityManager em;
+
+
+    // 게시글 목록보기
+    @Test
+    public void findAll_test() {
+        // given
+
+        // when
+        List<Board> boardList = boardPersistRepository.findAll();
+
+        // then
+        System.out.println("findAll_test/size : " +boardList.size());
+        System.out.println("findAll_test/username : " +boardList.get(2).getUsername());
+
+        // org.assertj.core.api
+        Assertions.assertThat(boardList.size()).isEqualTo(4);
+
+    }
 
 
     // insert test

@@ -16,6 +16,29 @@ public class BoardController {
     private final BoardPersistRepository boardNativeRepository;
     private final BoardPersistRepository boardPersistRepository;
 
+    // 게시글 목록보기 완료
+    @GetMapping("/")
+    public String index(HttpServletRequest request) {
+        List<Board> boardList = boardPersistRepository.findAll();
+        request.setAttribute("boardList", boardList);
+        return "index";
+    }
+
+    // 게시글 쓰기 완료
+    @PostMapping("/board/save")
+    public String save(BoardRequest.SaveDTO reqDTO) {
+        boardPersistRepository.save(reqDTO.toEntity());
+        return "redirect:/";
+    }
+
+    @GetMapping("/board/save-form")
+    public String saveForm() {
+        return "board/save-form";
+    }
+
+
+
+
     @GetMapping("/board/{id}/update-form")
     public String uodateForm(@PathVariable Integer id, HttpServletRequest request) {
         Board board = boardNativeRepository.findById(id);
@@ -36,25 +59,10 @@ public class BoardController {
         return "redirect:/";
     }
 
-    // 게시글 목록보기
-    @GetMapping("/")
-    public String index(HttpServletRequest request) {
-        List<Board> boardList = boardNativeRepository.findAll();
-        request.setAttribute("boardList", boardList);
-        return "index";
-    }
 
-    @GetMapping("/board/save-form")
-    public String saveForm() {
-        return "board/save-form";
-    }
 
-    // 게시글 쓰기
-    @PostMapping("/board/save")
-    public String save(BoardRequest.SaveDTO reqDTO) {
-        boardPersistRepository.save(reqDTO.toEntity());
-        return "redirect:/";
-    }
+
+
 
     // 게시글 상세보기
     @GetMapping("/board/{id}")
